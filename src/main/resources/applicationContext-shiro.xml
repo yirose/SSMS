@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
 <!-- 配置Realm ：直接实现连org.apache.shiro.realm.Realm 接口的bean -->
 	<bean id="jdbcRealm" class="com.yi.Controller.realms.shiroRealm"></bean>
 		
@@ -21,25 +22,25 @@
 	    <!-- Shiro的核心安全接口,这个属性是必须的 -->  
 	    <property name="securityManager" ref="securityManager"/>
 	    <!-- 身份认证失败，则跳转到登录页面的配置 -->  
-	    <property name="loginUrl" value="/login.jsp"/>
-	    <!-- 权限认证失败，则跳转到指定页面 -->  
+	    <property name="loginUrl" value="/login.jsp"/>   
 	    <!-- 身份认证成功，则跳转到登录页面的配置 -->  
 	    <property name="successUrl" value="/index.jsp"/>
-	    <property name="unauthorizedUrl" value="/unauthorized.jsp"/>  
+	    <!-- 权限认证失败，则跳转到指定页面 -->  	 
+	    <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
+	      
 	    <!-- Shiro连接约束配置,即过滤链的定义 -->  
 	    <property name="filterChainDefinitions">  
 	        <value>  
-				/login=anon 
+	       		 /index.jsp = anon 
+				/login = anon 				
 				/admin=authc 
 				<!-- /add=roles[admin]
 				/delete=perms["user:delete"]				
 				/update=perms["user:update"] -->				
-				<!-- /**=authc -->				
+				/** = authc			
 				<!-- 表示需要认证或开启rememberMe功能后可以访问 -->
-				/**=user   
-	          
+				<!--  /**=user -->
 	        </value>  
 	    </property>
 	</bean>
-
 </beans>
