@@ -32,14 +32,14 @@
 	    <property name="filterChainDefinitions">  
 	        <value>  
 	       		 /index.jsp = anon 
-				/login = anon 				
-				/admin=authc 
-				<!-- /add=roles[admin]
-				/delete=perms["user:delete"]				
-				/update=perms["user:update"] -->				
-				/** = authc			
-				<!-- 表示需要认证或开启rememberMe功能后可以访问 -->
-				<!--  /**=user -->
+			/login = anon 				
+			/admin=authc 
+			<!-- /add=roles[admin]
+			/delete=perms["user:delete"]				
+			/update=perms["user:update"] -->				
+			/** = authc			
+			<!-- 表示需要认证或开启rememberMe功能后可以访问 -->
+			<!--  /**=user -->
 	        </value>  
 	    </property>
 	</bean>
