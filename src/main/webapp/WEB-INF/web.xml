@@ -7,7 +7,7 @@
 	<!-- 1: 启动Spring容器, 监听事物 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:applicationContext.xml</param-value>
+		<param-value>classpath:applicationContext-*.xml</param-value>
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -51,6 +51,20 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
+	<!-- 4： shiro -->
+	<filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
 	<!-- 5： 使用Rest风格URL ，将页面普通的post请求转换为指定的delete或者put请求 -->
 	<filter>
 		<filter-name>HiddenHttpMethodFilter</filter-name>
