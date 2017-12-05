@@ -28,20 +28,25 @@
 	    <!-- 权限认证失败，则跳转到指定页面 -->  	 
 	    <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
 	      
-	    <!-- Shiro连接约束配置,即过滤链的定义 -->  
+	    <!-- Shiro连接约束配置,即过滤链的定义
+	    1). anon 			可匿名访问
+	    2). authc 		必须认证后才能访问
+	    3). logout 		注销
+	     -->  	    
 	    <property name="filterChainDefinitions">  
 	        <value>  
 		       	/index.jsp = anon 
 				/login = anon
-				/list = anon 
-				/list.jsp = anon 	
+				
+				/logout = logout	
+				<!-- 
 				/admin=authc 
-				<!-- /add=roles[admin]
+				/add=roles[admin]
 				/delete=perms["user:delete"]				
 				/update=perms["user:update"] -->				
 				/** = authc			
 				<!-- 表示需要认证或开启rememberMe功能后可以访问 -->
-				<!--  /**=user -->
+				<!--  /**=user -->				
 	        </value>  
 	    </property>
 	</bean>
