@@ -45,6 +45,7 @@
 	<constructor-arg name="executorType" value="BATCH"></constructor-arg>
 	</bean>
 	
+  
 	<!-- ======================事务控制的配置========================== -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<!-- 控制数据源 -->

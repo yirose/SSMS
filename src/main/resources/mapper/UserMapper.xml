@@ -92,6 +92,15 @@
     from user
     where userId = #{userid,jdbcType=INTEGER}
   </select>
+  
+  <!-- 用户名查询 -->
+  <select id="selectByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where username = #{username,jdbcType=VARCHAR}
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user
     where userId = #{userid,jdbcType=INTEGER}

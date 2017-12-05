@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 <!-- 配置Realm ：直接实现连org.apache.shiro.realm.Realm 接口的bean -->
-	<bean id="jdbcRealm" class="com.yi.Controller.realms.shiroRealm"></bean>
+	<bean id="jdbcRealm" class="com.yi.controller.realms.shiroRealm"></bean>
 		
 	<!-- 缓存管理器 使用Ehcache实现 -->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
