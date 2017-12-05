@@ -1,5 +1,8 @@
 package com.yi.controller.realms;
 
+
+import java.util.List;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -30,12 +33,14 @@ public class shiroRealm extends AuthenticatingRealm {
 		String username = upToken.getUsername();
 		
 		//3：调用数据库的方法，从数据库中查询username的对应记录；
-		User user = userService.getUser(username);
+		List<User> users = userService.getUser("ni");		
+		System.out.println(users.get(0).getUsername());
+		//User user = userService.getUser(username);
 
-		System.out.println("从数据库中获取username："+user.getUsername() +" 的对应记录");
+		System.out.println("从数据库中获取username："+ username +" 的对应记录");
 
 		//4：若用户不存在，则抛出 UnknownAccountException 异常；
-		if(user.getUsername().isEmpty()){
+		if(username.isEmpty()){
 			throw new UnknownAccountException("用户不存在！");			
 		}
 		//5：根据用户信息，决定是否需要抛出其它的 AuthenticationException 异常；
@@ -45,10 +50,10 @@ public class shiroRealm extends AuthenticatingRealm {
 		//6：根据用户的情况，来构建AuthenticationInfo对象并返回。通常使用的实现类SimpleAuthenticationInfo
 		// 一下信息是从数据库中获取
 		//1:  principal 认证实体信息，可以使用户（帐号）信息，也可以使数据表对应的用户的实体信息。
-		Object principal = user.getUsername();
+		Object principal = username;
 		
 		//2: credentials 密码
-		Object credentials = user.getPassword();
+		Object credentials = "123456";
 		
 		//3: realmName 当前realm的对象的name 调用父类的getName() 方法即可。
 		String realmName = getName();
