@@ -30,35 +30,37 @@ public class shiroRealm extends AuthenticatingRealm {
 		UsernamePasswordToken upToken =(UsernamePasswordToken) token;
 		
 		//2：从UsernamePasswordToken 中获取username;		
-		String username = upToken.getUsername();
+		String username = upToken.getUsername();		
 		
 		//3：调用数据库的方法，从数据库中查询username的对应记录；
-		List<User> users = userService.getUser("ni");		
-		System.out.println(users.get(0).getUsername());
+		List<User> users = userService.getUser(username);		
+		// 添加selectByUserName查询使用
 		//User user = userService.getUser(username);
-
-		System.out.println("从数据库中获取username："+ username +" 的对应记录");
+		
 
 		//4：若用户不存在，则抛出 UnknownAccountException 异常；
-		if(username.isEmpty()){
+		if(users.size() <= 0){
 			throw new UnknownAccountException("用户不存在！");			
 		}
 		//5：根据用户信息，决定是否需要抛出其它的 AuthenticationException 异常；
-		if("monster".equals(username)){
+		if(users.get(0).getTickeid().equals(2)){
 			throw new LockedAccountException("用户被锁定！");			
-		}		
+		}
+		
+		
 		//6：根据用户的情况，来构建AuthenticationInfo对象并返回。通常使用的实现类SimpleAuthenticationInfo
 		// 一下信息是从数据库中获取
 		//1:  principal 认证实体信息，可以使用户（帐号）信息，也可以使数据表对应的用户的实体信息。
-		Object principal = username;
+		Object principal = users.get(0).getUsername();
 		
 		//2: credentials 密码
-		Object credentials = "123456";
+		Object credentials = users.get(0).getPassword();
 		
 		//3: realmName 当前realm的对象的name 调用父类的getName() 方法即可。
 		String realmName = getName();
 		
 		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials, realmName);
-		return info;
+
+		return info;		
 	}
 }
