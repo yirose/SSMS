@@ -32,7 +32,9 @@
 	    <property name="filterChainDefinitions">  
 	        <value>  
 		       	/index.jsp = anon 
-				/login = anon 				
+				/login = anon
+				/list = anon 
+				/list.jsp = anon 	
 				/admin=authc 
 				<!-- /add=roles[admin]
 				/delete=perms["user:delete"]				

@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>Iogin Page</h1>
-<form action="userLogin" method="POST">
+<form action="login" method="POST">
 username:<input type="text" name="username" />
 <br><br>
 password:<input type="password" name="password" />
