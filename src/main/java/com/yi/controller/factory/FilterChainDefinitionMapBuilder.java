@@ -11,6 +11,7 @@ public class FilterChainDefinitionMapBuilder {
 		map.put("/user.jsp", "roles[user]");
 		map.put("/logout", "logout");
 		map.put("/**", "authc");
+
 		return map;
 	}
 }
