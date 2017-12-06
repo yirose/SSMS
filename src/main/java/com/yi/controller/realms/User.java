@@ -3,6 +3,7 @@ package com.yi.controller.realms;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,4 +42,14 @@ public class User {
 		// 页面加载
 		return "list";
 	}
+	
+	public static void main(String[] args) {
+		String hashAlgorithmName = "MD5";
+		Object credentials = "123456";
+		Object salt = "admin";
+		int hashIterations =1024;
+		Object result = new SimpleHash(hashAlgorithmName, credentials, salt, hashIterations);
+		System.out.println(result);
+	}
+
 }

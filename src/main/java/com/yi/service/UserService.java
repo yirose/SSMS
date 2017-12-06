@@ -32,8 +32,7 @@ public class UserService {
 		Criteria criteria = userExample.createCriteria();
 		
 		//查询
-		criteria.andUsernameEqualTo(username);
-		
+		criteria.andUsernameEqualTo(username);		
 		// 模糊查询
 		//criteria.andUsernameLike("%"+username+"%");
 		

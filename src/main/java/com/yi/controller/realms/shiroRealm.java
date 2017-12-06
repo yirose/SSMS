@@ -1,6 +1,5 @@
 package com.yi.controller.realms;
 
-
 import java.util.List;
 
 import org.apache.shiro.authc.AuthenticationException;
@@ -10,18 +9,23 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.realm.AuthenticatingRealm;
+import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.yi.bean.User;
 import com.yi.service.UserService;
 
-
-public class shiroRealm extends AuthenticatingRealm {
+public class shiroRealm extends AuthorizingRealm {
 	
 	@Autowired
 	UserService userService;
 
+	/**
+	 * 认证方法 
+	 */	
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(
 			AuthenticationToken token) throws AuthenticationException {
@@ -32,7 +36,7 @@ public class shiroRealm extends AuthenticatingRealm {
 		//2：从UsernamePasswordToken 中获取username;		
 		String username = upToken.getUsername();		
 		
-		//3：调用数据库的方法，从数据库中查询username的对应记录；
+		//3：调用数据库的方法，从数据库中查询username的对应记录；		
 		List<User> users = userService.getUser(username);		
 		// 添加selectByUserName查询使用
 		//User user = userService.getUser(username);
@@ -43,7 +47,7 @@ public class shiroRealm extends AuthenticatingRealm {
 			throw new UnknownAccountException("用户不存在！");			
 		}
 		//5：根据用户信息，决定是否需要抛出其它的 AuthenticationException 异常；
-		if(users.get(0).getTickeid().equals(2)){
+		if(users.get(0).getTickeid().equals(0)){
 			throw new LockedAccountException("用户被锁定！");			
 		}
 		
@@ -56,11 +60,25 @@ public class shiroRealm extends AuthenticatingRealm {
 		//2: credentials 密码
 		Object credentials = users.get(0).getPassword();
 		
+		
+		//3：盐值
+		ByteSource credentialsSalt = ByteSource.Util.bytes(users.get(0).getUsername());
+		
 		//3: realmName 当前realm的对象的name 调用父类的getName() 方法即可。
 		String realmName = getName();
 		
-		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials, realmName);
+		//SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials, realmName);
+		SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(principal, credentials, credentialsSalt, realmName);
 
 		return info;		
+	}
+
+	/**
+	 * 权限方法 
+	 */	
+	@Override
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
