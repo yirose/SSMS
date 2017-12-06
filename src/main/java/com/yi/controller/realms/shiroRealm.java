@@ -1,6 +1,8 @@
 package com.yi.controller.realms;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -10,6 +12,7 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -75,10 +78,25 @@ public class shiroRealm extends AuthorizingRealm {
 
 	/**
 	 * 权限方法 
+	 * 被 shiro 回调方法
 	 */	
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		// TODO Auto-generated method stub
-		return null;
+
+		//1：PrincipalCollection 中来获取登录用户信息
+		Object Principal = principals.getPrimaryPrincipal();
+		
+		//2：利用登录的用户信息，来获取当前用户的角色或权限（1. 登录用户信息包含角色或权限。 2.  可能需要查询数据库）
+		Set<String> roles =new HashSet<>();
+		roles.add("user");
+		if ("admin".equals(Principal)) {
+			roles.add("admin");			
+		}
+		
+		//3：创建 SimpleAuthorizationInfo 并设置reles 属性。
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
+		
+		//4：返回 SimpleAuthorizationInfo 对象。
+		return info;
 	}
 }

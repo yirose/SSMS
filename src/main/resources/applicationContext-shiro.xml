@@ -2,8 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	
-<!-- 配置Realm ：直接实现连org.apache.shiro.realm.Realm 接口的bean -->
+
+	<!-- 配置Realm ：直接实现连org.apache.shiro.realm.Realm 接口的bean -->
 	<bean id="jdbcRealm" class="com.yi.controller.realms.shiroRealm">
 		<property name="credentialsMatcher">
 			<bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
@@ -12,49 +12,48 @@
 			</bean>
 		</property>
 	</bean>
-		
+
 	<!-- 缓存管理器 使用Ehcache实现 -->
-    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />
-</bean>
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />
+	</bean>
 
 	<!-- 安全管理器 -->
-	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">  
-  	  <property name="realm" ref="jdbcRealm"/>  
-  	  <property name="cacheManager" ref="cacheManager" />
-</bean> 
-	
-	<!-- Shiro过滤器 -->
-	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">  
-	    <!-- Shiro的核心安全接口,这个属性是必须的 -->  
-	    <property name="securityManager" ref="securityManager"/>
-	    <!-- 身份认证失败，则跳转到登录页面的配置 -->  
-	    <property name="loginUrl" value="/login.jsp"/>   
-	    <!-- 身份认证成功，则跳转到登录页面的配置 -->  
-	    <property name="successUrl" value="/index.jsp"/>
-	    <!-- 权限认证失败，则跳转到指定页面 -->  	 
-	    <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
-	      
-	    <!-- Shiro连接约束配置,即过滤链的定义
-	    1). anon 			可匿名访问
-	    2). authc 		必须认证后才能访问
-	    3). logout 		注销
-	     -->  	    
-	    <property name="filterChainDefinitions">  
-	        <value>  
-		       	/index.jsp = anon 
-				/login = anon
-				
-				/logout = logout	
-				<!-- 
-				/admin=authc 
-				/add=roles[admin]
-				/delete=perms["user:delete"]				
-				/update=perms["user:update"] -->				
-				/** = authc			
-				<!-- 表示需要认证或开启rememberMe功能后可以访问 -->
-				<!--  /**=user -->				
-	        </value>  
-	    </property>
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="jdbcRealm" />
+		<property name="cacheManager" ref="cacheManager" />
 	</bean>
+
+	<!-- Shiro过滤器 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- Shiro的核心安全接口,这个属性是必须的 -->
+		<property name="securityManager" ref="securityManager" />
+		<!-- 身份认证失败，则跳转到登录页面的配置 -->
+		<property name="loginUrl" value="/login.jsp" />
+		<!-- 身份认证成功，则跳转到登录页面的配置 -->
+		<property name="successUrl" value="/index.jsp" />
+		<!-- 权限认证失败，则跳转到指定页面 -->
+		<property name="unauthorizedUrl" value="/unauthorized.jsp" />
+		<property name="filterChainDefinitionMap" ref="filterChainDefinitionMap"></property>
+
+		<!-- Shiro连接约束配置,即过滤链的定义 
+		1). anon 可匿名访问 
+		2). authc 必须认证后才能访问 
+		3). logout 注销 -->
+		<!-- <property name="filterChainDefinitions"> 
+			<value> 
+				/index.jsp = anon 
+				/login = anon 
+				/admin.jsp = roles[admin] 
+				/user.jsp = roles[user] 
+				/logout = 
+				logout /** = authc 
+			</value> 
+		</property> -->
+	</bean>
+	<!-- 配置一个bean, 该bean 实际是一个Map，通过实例工厂的方式 -->
+	<bean id="filterChainDefinitionMap" factory-bean="FilterChainDefinitionMapBuilder"
+		factory-method="buildFilterChainDefinitionMap"></bean>
+	<bean id="FilterChainDefinitionMapBuilder"
+		class="com.yi.controller.factory.FilterChainDefinitionMapBuilder"></bean>
 </beans>
